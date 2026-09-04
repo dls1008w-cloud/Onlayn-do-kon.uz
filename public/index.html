@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uzum Market — Liquid Glass Store</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+
+
+  <!-- iOS Dynamic Island Notification -->
+  <div class="dynamic-island-container">
+    <div id="dynamic-island" class="dynamic-island">
+      <div class="island-icon">✓</div>
+      <span id="island-text">Savatga qo'shildi</span>
+    </div>
+  </div>
+
+  <!-- Liquid Glass Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-logo" id="brand-logo">
+        <div class="logo-badge">U</div>
+        <div class="logo-text">uzum market</div>
+      </div>
+
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Mahsulotlar bo'yicha qidiruv..." autocomplete="off">
+        <button id="search-clear" class="search-clear" title="Tozalash">✕</button>
+      </div>
+
+      <div class="header-actions">
+        <button id="wishlist-btn" class="icon-btn">
+          <span>❤️</span>
+          <span class="desktop-only">Saralanganlar</span>
+          <span id="wishlist-count" class="badge-pill">0</span>
+        </button>
+        <button id="cart-btn" class="icon-btn cart-btn-special">
+          <span>🛍️</span>
+          <span>Savat</span>
+          <span id="cart-count" class="badge-pill">0</span>
+        </button>
+        <a href="/admin.html" class="icon-btn" title="Admin panel">⚙️</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Uzum Promo Banner with Frosted Glass -->
+    <div class="promo-banner">
+      <div class="promo-content">
+        <h2 class="promo-title">1 kunda bepul yetkazib berish 🚀</h2>
+        <p class="promo-subtitle">Buyurtmangizni ertagayoq eng yaqin tarqatish punktidan yoki kuryer orqali oling!</p>
+      </div>
+      <div class="promo-tags">
+        <div class="promo-tag-item"><span>⚡</span> Muddatli to'lov 0%</div>
+        <div class="promo-tag-item"><span>🛡️</span> 100% original</div>
+        <div class="promo-tag-item"><span>↩️</span> Oson qaytarish</div>
+      </div>
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div class="categories-wrapper" id="categories-wrapper">
+      <button class="cat-chip active" data-cat="all">Barchasi</button>
+      <button class="cat-chip" data-cat="elektronika">Elektronika</button>
+      <button class="cat-chip" data-cat="kiyim">Kiyim-kechak</button>
+      <button class="cat-chip" data-cat="maishiy">Maishiy texnika</button>
+      <button class="cat-chip" data-cat="aksessuarlar">Aksessuarlar</button>
+      <button class="cat-chip" data-cat="gozallik">Go'zallik</button>
+      <button class="cat-chip" data-cat="oshxona">Oshxona</button>
+    </div>
+
+    <!-- Section Header -->
+    <div class="section-header">
+      <h3 class="section-title">Ommabop mahsulotlar</h3>
+      <span id="products-count" class="section-count"></span>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products" class="product-grid">
+      <!-- Dynamically filled by store.js -->
+    </div>
+
+  </main>
+
+  <!-- iOS Frosted Glass Cart Drawer & Backdrop -->
+  <div id="cart-backdrop" class="cart-backdrop"></div>
+  
+  <div id="cart-panel" class="cart-panel">
+    <div class="cart-header">
+      <h2><span>🛍️</span> Savat</h2>
+      <button id="close-cart" class="close-btn" title="Yopish">✕</button>
+    </div>
+
+    <div id="cart-items" class="cart-body">
+      <!-- Items dynamically injected -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="total-row">
+        <span class="total-label">Jami to'lov:</span>
+        <span id="cart-total" class="total-amount">0 so'm</span>
+      </div>
+
+      <form id="order-form" class="order-form-group">
+        <input type="text" name="customer_name" class="glass-input" placeholder="Ism va familiyangiz" required>
+        <input type="tel" name="phone" class="glass-input" placeholder="Telefon raqamingiz (+998 ...)" required>
+        <textarea name="address" class="glass-textarea" placeholder="Yetkazib berish manzili yoki Uzum tarqatish punkti"></textarea>
+        <button type="submit" class="submit-order-btn">
+          <span>Buyurtma berish</span>
+          <span>→</span>
+        </button>
+      </form>
+      <p id="order-status" class="order-alert"></p>
+    </div>
+  </div>
+
+  <script src="/store.js"></script>
+</body>
+</html>

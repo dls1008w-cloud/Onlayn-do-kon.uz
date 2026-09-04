@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Uzum Market</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+
+
+  <!-- Admin Login Screen -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="logo-badge" style="margin: 0 auto 16px;">U</div>
+      <h2>Admin tizimiga kirish</h2>
+      <form id="login-form" class="login-form">
+        <input type="password" id="password" class="glass-input" placeholder="Admin parolini kiriting" required autofocus>
+        <button type="submit" class="submit-order-btn">Kirish</button>
+        <p id="login-error" class="order-alert error"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-panel" class="hidden">
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand-logo">
+          <div class="logo-badge">U</div>
+          <div class="logo-text">Uzum Admin</div>
+        </div>
+
+        <div class="header-actions">
+          <a href="/" class="icon-btn">🏪 Do'konni ko'rish</a>
+          <button id="logout-btn" class="icon-btn" style="color: #ff3b30;">Chiqish</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-container">
+      <div class="admin-nav">
+        <button class="admin-nav-btn active tab-btn" data-tab="products">📦 Mahsulotlar</button>
+        <button class="admin-nav-btn tab-btn" data-tab="orders">📋 Buyurtmalar</button>
+      </div>
+
+      <!-- Products Tab -->
+      <section id="tab-products" class="tab-content admin-card">
+        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 700;">Mahsulot qo'shish / tahrirlash</h3>
+        <form id="product-form" class="product-form">
+          <input type="hidden" id="product-id">
+          <input type="text" id="p-name" class="glass-input" placeholder="Mahsulot nomi" required>
+          <input type="text" id="p-desc" class="glass-input" placeholder="Tavsif (ixtiyoriy)">
+          <input type="number" id="p-price" class="glass-input" placeholder="Narxi (so'm)" required min="0">
+          <input type="text" id="p-image" class="glass-input" placeholder="Rasm URL havolasi">
+          <input type="number" id="p-stock" class="glass-input" placeholder="Mavjud soni (dona)" min="0" value="10">
+          <button type="submit" id="p-submit" class="submit-order-btn" style="padding: 10px 18px;">+ Qo'shish</button>
+          <button type="button" id="p-cancel" class="icon-btn hidden" style="border-radius: var(--radius-sm); padding: 10px 14px;">Bekor qilish</button>
+        </form>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Rasm</th>
+                <th>Mahsulot nomi</th>
+                <th>Narx</th>
+                <th>Omborda</th>
+                <th style="text-align: right;">Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="product-list">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Orders Tab -->
+      <section id="tab-orders" class="tab-content admin-card hidden">
+        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 700;">Mijozlar buyurtmalari</h3>
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Mijoz</th>
+                <th>Telefon</th>
+                <th>Yetkazish manzili</th>
+                <th>Mahsulotlar</th>
+                <th>Jami to'lov</th>
+                <th>Holat</th>
+              </tr>
+            </thead>
+            <tbody id="order-list">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

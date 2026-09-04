@@ -1,0 +1,14 @@
+{
+  "name": "onlayn-dokon",
+  "version": "1.0.0",
+  "description": "Onlayn do'kon: sotuv sahifasi + admin panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
