@@ -73,18 +73,20 @@ async function authFetch(url, options = {}) {
 // ---------------------------------------------------------
 // Products Management
 // ---------------------------------------------------------
+let currentProducts = [];
+
 async function loadProducts() {
   try {
     const res = await authFetch('/api/admin/products');
-    const products = await res.json();
+    currentProducts = await res.json();
     const list = document.getElementById('product-list');
 
-    if (products.length === 0) {
+    if (currentProducts.length === 0) {
       list.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 24px;">Mahsulotlar mavjud emas</td></tr>';
       return;
     }
 
-    list.innerHTML = products.map(p => `
+    list.innerHTML = currentProducts.map(p => `
       <tr>
         <td style="width: 50px;">
           ${p.image_url ? 
@@ -99,7 +101,7 @@ async function loadProducts() {
         <td><strong>${formatPrice(p.price)} so'm</strong></td>
         <td>${p.stock > 0 ? `<span style="color: #34c759; font-weight: 600;">${p.stock} dona</span>` : `<span style="color: #ff3b30; font-weight: 600;">Tugagan</span>`}</td>
         <td style="text-align: right; white-space: nowrap;">
-          <button class="admin-action-btn btn-edit" onclick='editProduct(${JSON.stringify(p)})'>Tahrirlash</button>
+          <button class="admin-action-btn btn-edit" onclick="editProductById(${p.id})">Tahrirlash</button>
           <button class="admin-action-btn btn-delete" onclick="deleteProduct(${p.id})">O'chirish</button>
         </td>
       </tr>
@@ -107,6 +109,11 @@ async function loadProducts() {
   } catch (err) {
     console.error('Mahsulotlarni yuklashda xatolik:', err);
   }
+}
+
+function editProductById(id) {
+  const p = currentProducts.find(item => item.id === Number(id));
+  if (p) editProduct(p);
 }
 
 function editProduct(p) {

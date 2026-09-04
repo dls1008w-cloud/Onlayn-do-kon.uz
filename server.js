@@ -88,10 +88,24 @@ function saveAdminPassword(newPassword) {
     .run('admin_password', hashed);
 }
 
+function getTokenSecret() {
+  if (process.env.ADMIN_TOKEN_SECRET && process.env.ADMIN_TOKEN_SECRET !== 'change-this-secret') {
+    return process.env.ADMIN_TOKEN_SECRET;
+  }
+  let row = db.prepare('SELECT value FROM settings WHERE key = ?').get('token_secret');
+  if (!row) {
+    const randomSecret = crypto.randomBytes(32).toString('hex');
+    db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value')
+      .run('token_secret', randomSecret);
+    return randomSecret;
+  }
+  return row.value;
+}
+
 // --- Simple admin auth (signed token) ---
 function makeToken() {
   const payload = `admin:${Date.now()}`;
-  const sig = crypto.createHmac('sha256', ADMIN_TOKEN_SECRET).update(payload).digest('hex');
+  const sig = crypto.createHmac('sha256', getTokenSecret()).update(payload).digest('hex');
   return Buffer.from(`${payload}:${sig}`).toString('base64');
 }
 
@@ -100,7 +114,7 @@ function checkToken(token) {
     const decoded = Buffer.from(token, 'base64').toString('utf8');
     const [prefix, ts, sig] = decoded.split(':');
     const payload = `${prefix}:${ts}`;
-    const expected = crypto.createHmac('sha256', ADMIN_TOKEN_SECRET).update(payload).digest('hex');
+    const expected = crypto.createHmac('sha256', getTokenSecret()).update(payload).digest('hex');
     if (sig !== expected) return false;
     // token valid for 12 hours
     const age = Date.now() - Number(ts);
@@ -155,9 +169,34 @@ app.post('/api/orders', (req, res) => {
   if (!customer_name || !phone || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Ma\'lumotlar to\'liq emas' });
   }
-  const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+  const verifiedItems = [];
+  let total = 0;
+  const getProductStmt = db.prepare('SELECT id, name, price, stock FROM products WHERE id = ?');
+
+  for (const item of items) {
+    if (!item || !item.id || !Number.isInteger(item.qty) || item.qty <= 0) {
+      return res.status(400).json({ error: 'Har bir mahsulot soni 0 dan katta butun son bo\'lishi kerak' });
+    }
+
+    const product = getProductStmt.get(item.id);
+    if (!product) {
+      return res.status(400).json({ error: 'Tanlangan mahsulot topilmadi' });
+    }
+
+    const itemPrice = Number(product.price);
+    total += itemPrice * item.qty;
+
+    verifiedItems.push({
+      id: product.id,
+      name: product.name,
+      price: itemPrice,
+      qty: item.qty
+    });
+  }
+
   const stmt = db.prepare('INSERT INTO orders (customer_name, phone, address, items, total) VALUES (?, ?, ?, ?, ?)');
-  const info = stmt.run(customer_name, phone, address || '', JSON.stringify(items), total);
+  const info = stmt.run(customer_name, phone, address || '', JSON.stringify(verifiedItems), total);
   res.json({ id: info.lastInsertRowid, total });
 });
 
