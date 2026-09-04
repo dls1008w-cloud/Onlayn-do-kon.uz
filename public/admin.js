@@ -206,3 +206,62 @@ async function updateStatus(id, status) {
     body: JSON.stringify({ status })
   });
 }
+
+// ---------------------------------------------------------
+// Change Password Management
+// ---------------------------------------------------------
+const passwordForm = document.getElementById('change-password-form');
+if (passwordForm) {
+  passwordForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const currPass = document.getElementById('curr-pass').value;
+    const newPass = document.getElementById('new-pass').value;
+    const confirmPass = document.getElementById('confirm-pass').value;
+    const feedback = document.getElementById('password-feedback');
+    const submitBtn = document.getElementById('save-pass-btn');
+
+    if (newPass !== confirmPass) {
+      feedback.className = 'order-alert error';
+      feedback.textContent = 'Yangi parollar bir-biriga mos kelmadi!';
+      return;
+    }
+
+    if (newPass.length < 8) {
+      feedback.className = 'order-alert error';
+      feedback.textContent = 'Yangi parol kamida 8 ta belgidan iborat bo\'lishi kerak!';
+      return;
+    }
+
+    feedback.className = 'order-alert';
+    feedback.textContent = 'Parol yangilanmoqda...';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await authFetch('/api/admin/change-password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: currPass,
+          newPassword: newPass,
+          confirmPassword: confirmPass
+        })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        feedback.className = 'order-alert success';
+        feedback.textContent = 'Parol muvaffaqiyatli o\'zgartirildi!';
+        passwordForm.reset();
+      } else {
+        feedback.className = 'order-alert error';
+        feedback.textContent = data.error || 'Parolni o\'zgartirishda xatolik yuz berdi';
+      }
+    } catch (err) {
+      feedback.className = 'order-alert error';
+      feedback.textContent = 'Server bilan ulanishda xatolik yuz berdi';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+}
+

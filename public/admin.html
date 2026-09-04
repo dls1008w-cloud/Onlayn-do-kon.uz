@@ -43,6 +43,7 @@
       <div class="admin-nav">
         <button class="admin-nav-btn active tab-btn" data-tab="products">📦 Mahsulotlar</button>
         <button class="admin-nav-btn tab-btn" data-tab="orders">📋 Buyurtmalar</button>
+        <button class="admin-nav-btn tab-btn" data-tab="password">🔒 Parol</button>
       </div>
 
       <!-- Products Tab -->
@@ -97,6 +98,27 @@
             </tbody>
           </table>
         </div>
+      </section>
+
+      <!-- Password Tab -->
+      <section id="tab-password" class="tab-content admin-card hidden">
+        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 700;">Admin parolini o'zgartirish</h3>
+        <form id="change-password-form" style="max-width: 400px; display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Hozirgi parol</label>
+            <input type="password" id="curr-pass" class="glass-input" placeholder="Hozirgi parolni kiriting" required autocomplete="current-password">
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Yangi parol (kamida 8 ta belgi)</label>
+            <input type="password" id="new-pass" class="glass-input" placeholder="Yangi parol" minlength="8" required autocomplete="new-password">
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Yangi parolni tasdiqlash</label>
+            <input type="password" id="confirm-pass" class="glass-input" placeholder="Yangi parolni qayta kiriting" minlength="8" required autocomplete="new-password">
+          </div>
+          <button type="submit" id="save-pass-btn" class="submit-order-btn" style="padding: 11px 18px; margin-top: 4px;">Parolni saqlash</button>
+          <p id="password-feedback" class="order-alert"></p>
+        </form>
       </section>
     </div>
   </div>
